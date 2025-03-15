@@ -6,7 +6,7 @@ import com.tow.mandu.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long>{
 
-	
+	User getByEmailAndPassword(String email, String password);
 	
 	
 }

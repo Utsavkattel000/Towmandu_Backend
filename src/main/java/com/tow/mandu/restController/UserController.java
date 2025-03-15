@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tow.mandu.model.User;
 import com.tow.mandu.service.UserService;
 
+import jakarta.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -32,6 +34,18 @@ public class UserController {
 		return ResponseEntity.badRequest().body("\"failed\"");
 	}
 	
+	
+	@PostMapping("/login")
+	public ResponseEntity<String> login(@RequestBody User user,HttpSession session){
+		if(!user.getEmail().isEmpty() && !user.getPassword().isEmpty()) {
+			if(userService.getByEmailAndPassword(user.getEmail(), user.getPassword())!=null) {
+				session.setAttribute("user",userService.getByEmailAndPassword(user.getEmail(), user.getPassword()));
+				return ResponseEntity.ok("\"success\"");
+			}
+			return ResponseEntity.badRequest().body("\" User does not exist\"");
+		}
+		return ResponseEntity.badRequest().body("\"failed\"");
+	}
 	
 	
 }
