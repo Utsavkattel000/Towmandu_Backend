@@ -1,13 +1,7 @@
 package com.tow.mandu.model;
 
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import com.tow.mandu.enums.RoleType;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,13 +13,11 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String fullName;
-	private String email;
+	@Column(unique = true)
 	private String phone;
-	private String role;
+	@Column(unique = true)
+	private String email;
 	private String password;
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> review;
-	
-	
-
+	@Enumerated(EnumType.STRING)
+	private RoleType role;
 }

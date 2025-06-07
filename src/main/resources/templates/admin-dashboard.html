@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>admin-dashboard</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+</head>
+
+<body>
+<div class="navbar">
+    <img src="img/logo.png" alt="" class="logo">
+    <a href="/admin-dashboard" class="selected" style="margin-left: 150px;">Dashboard</a>
+    <a href="/users" class="links">Users</a>
+    <a href="/service-providers" class="links">Service Providers</a>
+    <img src="img/admin_human.png" alt="" class="admin-human">
+    <span class="name" th:text="${adminDashboardData.fullName}">Admin</span>
+    <a href="/logout" class="logout">LOGOUT</a>
+</div>
+
+<div class="main-container">
+    <img src="img/admin-dashboard-human.png" alt="" class="admin-dashboard-human">
+    <div class="right-container">
+        <div class="right-top-container">
+            <div class="welcome-stuff">
+                <span class="welcome-text">Welcome</span>
+                <br>
+                <span class="admin-name" th:text="${adminDashboardData.fullName}">Admin</span>
+                <br>
+                <span class="system-status">All Systems Are Running Smoothly</span>
+            </div>
+            <div class="total-users">
+                <span class="total-heading">Total Users</span>
+                <span class="total-count" th:text="${adminDashboardData.totalUsers}">30</span>
+            </div>
+            <div class="total-service-providers">
+                <span class="total-heading">Total Service Providers</span>
+                <span class="total-count" th:text="${adminDashboardData.totalProviders}">05</span>
+            </div>
+        </div>
+
+        <div class="right-bottom-container">
+            <div class="pending-provider-container">
+                <img src="img/pending-service-providers.png" alt="" class="pending-service-providers-icon">
+                <div class="pending-provider-info-container">
+                    <span class="pending-service-provider-heading">Pending Service Providers</span>
+                    <br>
+                    <span class="pending-service-provider-count" th:text="${adminDashboardData.totalPendingProviders}">25</span>
+                </div>
+            </div>
+
+            <div class="active-provider-container">
+                <img src="img/active-service-providers.png" alt="" class="pending-service-providers-icon">
+                <div class="active-service-provider-info-container">
+                    <span class="pending-service-provider-heading">Active Service Providers</span>
+                    <br>
+                    <span class="pending-service-provider-count" th:text="${adminDashboardData.activeProviders}">05</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="line"></div>
+
+<div class="buttom-container">
+    <span class="quick">Quick</span>
+    <span class="action">Actions</span>
+</div>
+
+<div class="buttons-container">
+    <a href="/pending-providers" class="buttons">View Pending Approvals</a>
+    <a href="/manage-providers" class="buttons">Manage Service Providers</a>
+    <a href="/view-all-requests" class="buttons">View all Service Requests</a>
+</div>
+
+<div class="footer">
+    <span>©2024 by Towmandu | All rights Reserved |</span>
+</div>
+</body>
+
+</html>

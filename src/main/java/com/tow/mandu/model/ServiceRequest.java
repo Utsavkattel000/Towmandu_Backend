@@ -1,13 +1,12 @@
 package com.tow.mandu.model;
 
-import java.time.LocalTime;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.tow.mandu.enums.ServiceStatus;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -17,14 +16,25 @@ public class ServiceRequest {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String serviceDescriptionByUser;
-	private LocalTime requestTime;
-	private LocalTime acceptTime;
-	private LocalTime serviceCompletionTime;
-	private String serviceRequestLongitude;
-	private String serviceRequestLatitude;
-	private String distanceToSelectedBusiness;
-	private float price;
-	
-	
-	
+	private LocalDateTime requestTime;
+	private String paymentStatus;
+	@Enumerated(EnumType.STRING)
+	private ServiceStatus serviceStatus;
+	private LocalDateTime acceptTime;
+	private LocalDateTime serviceCompletionTime;
+	private Double serviceRequestLongitude;
+	private Double serviceRequestLatitude;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "service_type_id", nullable = false)
+	private ServiceType serviceType;
+	private BigDecimal basePrice;
+	private BigDecimal finalPrice;
+	private Double distance;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "seeker_id", nullable = false)
+	private Seeker seeker;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "rider_id")
+	private Rider rider;
+	private String riderDescription;
 }

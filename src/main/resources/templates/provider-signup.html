@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Towmandu - Register Business Account</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" href="css/business-register.css">
+</head>
+<body>
+<div class="container">
+    <div class="logo-section">
+        <img src="img/business_logo.png" alt="" class="logo">
+    </div>
+
+    <div class="form-title">
+        <span class="register-text">Register</span> your Business Account
+    </div>
+
+    <form method="post" action="/business-registration" enctype="multipart/form-data">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="registered-name">Registered Name <span class="required">*</span></label>
+                <input type="text" id="registered-name" placeholder="Enter Registered Name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="phone-number">Phone Number <span class="required">*</span></label>
+                <input type="tel" id="phone-number" placeholder="Enter Phone Number" name="phone" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="email">Email Address <span class="required">*</span></label>
+                <input type="email" id="email" placeholder="Enter Email Address" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password <span class="required">*</span></label>
+                <input type="password" id="password" placeholder="Enter Password" name="password" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="locationLongitude">Location <span class="required">*</span></label>
+                <div class="location">
+                    <input type="text" id="locationLongitude" placeholder="Enter Longitude" name="locationLongitude" required>
+                    <input type="text" id="locationLatitude" placeholder="Enter Latitude" name="locationLatitude" required>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label for="pan-number">Pan Number <span class="required">*</span></label>
+                <input type="text" id="pan-number" placeholder="Enter Your Pan Number" name="panNumber" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="registration-certificate">Registration Certificate <span class="required">*</span></label>
+                <div class="file-upload-container">
+                    <div class="file-upload">
+                        <span class="file-upload-text">Upload your Certificate</span>
+                        <span class="file-upload-button">Choose File</span>
+                    </div>
+                    <input type="file" class="hidden-file-input" id="registration-certificate" name="certificate" accept=".pdf,.jpg,.jpeg,.png" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="registration-number">Registration Number<span class="required">*</span></label>
+                <input type="text" id="registration-number" placeholder="Enter business registration number" name="registrationNumber" required>
+            </div>
+        </div>
+
+        <button type="submit" class="register-button">Register</button>
+        <br>
+        <span class="sign-up">Don't have an account?<a class="sign-up-button" href="/login">Signup</a> </span>
+    </form>
+</div>
+
+<div class="footer">
+    ©2024 by Towmandu | All rights Reserved |
+</div>
+
+<script>
+    // File upload functionality
+    document.querySelector('.file-upload').addEventListener('click', function() {
+        document.getElementById('registration-certificate').click();
+    });
+
+    document.getElementById('registration-certificate').addEventListener('change', function(e) {
+        document.querySelector('.file-upload-text').textContent = e.target.files[0]?.name || 'Upload your Certificate';
+        if (e.target.files[0]) {
+            document.querySelector('.file-upload').style.borderColor = '#20b2aa';
+            document.querySelector('.file-upload').style.backgroundColor = 'white';
+            document.querySelector('.file-upload-text').style.color = '#333';
+        }
+    });
+    // Validation functions
+    function validateRegisteredName(input) {
+        const maxLength = 35;
+        const isValid = input.value.length <= maxLength;
+        input.setCustomValidity(isValid ? '' : `Registered name must be ${maxLength} characters or less`);
+    }
+
+    function validatePhoneNumber(input) {
+        const phoneRegex = /^[+\-\d]+$/;
+        const isValid = phoneRegex.test(input.value);
+        input.setCustomValidity(isValid ? '' : 'Phone number can only contain numbers, +, and -');
+    }
+
+    function validatePassword(input) {
+        const minLength = 8;
+        const hasUpperCase = /[A-Z]/.test(input.value);
+        const hasLowerCase = /[a-z]/.test(input.value);
+        const hasNumber = /\d/.test(input.value);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(input.value);
+
+        if (input.value.length < minLength) {
+            input.setCustomValidity('Password must be at least 8 characters long');
+        } else if (!hasUpperCase) {
+            input.setCustomValidity('Password must contain at least one uppercase letter');
+        } else if (!hasLowerCase) {
+            input.setCustomValidity('Password must contain at least one lowercase letter');
+        } else if (!hasNumber) {
+            input.setCustomValidity('Password must contain at least one number');
+        } else if (!hasSpecialChar) {
+            input.setCustomValidity('Password must contain at least one special character');
+        } else {
+            input.setCustomValidity('');
+        }
+    }
+
+    function validateLongitude(input) {
+        const value = parseFloat(input.value);
+        const isValid = !isNaN(value) && value >= -180 && value <= 180;
+        input.setCustomValidity(isValid ? '' : 'Longitude must be between -180 and 180');
+    }
+
+    function validateLatitude(input) {
+        const value = parseFloat(input.value);
+        const isValid = !isNaN(value) && value >= -90 && value <= 90;
+        input.setCustomValidity(isValid ? '' : 'Latitude must be between -90 and 90');
+    }
+
+    function validatePanNumber(input) {
+        const panRegex = /^\d+$/;
+        const isValid = panRegex.test(input.value);
+        input.setCustomValidity(isValid ? '' : 'PAN number can only contain numbers');
+    }
+
+    function validateRegistrationNumber(input) {
+        const regNumRegex = /^[\d-]+$/;
+        const isValid = regNumRegex.test(input.value);
+        input.setCustomValidity(isValid ? '' : 'Registration number can only contain numbers and -');
+    }
+
+    // Attach validation to inputs
+    document.addEventListener('DOMContentLoaded', () => {
+        const inputs = {
+            'registered-name': validateRegisteredName,
+            'phone-number': validatePhoneNumber,
+            'password': validatePassword,
+            'locationLongitude': validateLongitude,
+            'locationLatitude': validateLatitude,
+            'pan-number': validatePanNumber,
+            'registration-number': validateRegistrationNumber
+        };
+
+        Object.keys(inputs).forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                // Validate on input
+                input.addEventListener('input', () => {
+                    inputs[id](input);
+                    input.reportValidity();
+                });
+
+                // Validate on change (for cases where input event doesn't fire)
+                input.addEventListener('change', () => {
+                    inputs[id](input);
+                    input.reportValidity();
+                });
+            }
+        });
+
+        // File input validation
+        const fileInput = document.getElementById('registration-certificate');
+        fileInput.addEventListener('change', () => {
+            const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+            const file = fileInput.files[0];
+            if (file && !allowedTypes.includes(file.type)) {
+                fileInput.setCustomValidity('File must be a PDF, JPG, JPEG, or PNG');
+                fileInput.reportValidity();
+            } else {
+                fileInput.setCustomValidity('');
+            }
+        });
+
+        // Prevent form submission if any field is invalid
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (e) => {
+            Object.keys(inputs).forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    inputs[id](input);
+                    if (!input.checkValidity()) {
+                        input.reportValidity();
+                        e.preventDefault();
+                    }
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

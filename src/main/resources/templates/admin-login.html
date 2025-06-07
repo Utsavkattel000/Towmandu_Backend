@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <title>admin-login</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="css/admin-login.css">
+
+</head>
+
+<body>
+<div class="left-container">
+    <div class="image-container">
+        <img src="img/logo-provider.png" class="logo" alt="">
+    </div>
+    <div class="heading-container">
+            <span class="welcome">
+                Welcome to
+            </span>
+        <br>
+        <span class="admin">
+                Towmandu
+            </span>
+    </div>
+    <div class="login-form-container">
+        <form action="/login" method="post" style="display: flex; flex-direction: column; align-items: center;" class="login-form">
+            <div class="input-field-container">
+                <img src="img/email-icon.png" alt="">
+                <input type="email" placeholder="Email" class="input-fields" name="email" required>
+            </div>
+            <div class="input-field-container">
+                <img src="img/password-icon.png" alt="">
+                <input type="password" placeholder="Password" class="input-fields" name="password" required>
+            </div>
+            <span class="error-message" th:if="${error}" th:text="${error}">
+                Invalid credentials
+            </span>
+            <button type="submit" class="button">SIGN IN</button>
+
+          <span class="sign-up" >Don't have an account?<a class="sign-up-button" href="/business-registration">Signup</a> </span>
+
+        </form>
+
+
+    </div>
+
+
+
+</div>
+<div class="right-container">
+    <img src="img/admin-login.png" class="image" alt="">
+</div>
+
+</body>
+</html>

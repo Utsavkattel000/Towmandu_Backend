@@ -1,0 +1,224 @@
+body {
+    background-color: white;
+    margin: 0px;
+    font-family: 'Roboto';
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    padding-left: 100px;
+    height: 100px;
+    background-color: white;
+}
+
+.logo {
+    max-height: 80px;
+}
+
+.links {
+    text-decoration: none;
+    margin-left: 130px;
+    font-weight: bold;
+    font-size: large;
+    color: #6B8FBE;
+}
+
+.selected {
+    text-decoration: none;
+    margin-left: 130px;
+    font-weight: bold;
+    font-size: large;
+    color: #006BF6;
+}
+
+.admin-human {
+    background-color: #006BF6;
+    border-radius: 100px;
+    border: 0px;
+    margin-left: 250px;
+}
+
+.name {
+    margin-left: 30px;
+    font-size: large;
+    color: #006BF6;
+}
+
+.logout {
+    color: white;
+    text-decoration: none;
+    height: 30px;
+    padding-top: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    background-color: #F61900;
+    border-radius: 30px;
+    margin-left: 50px;
+}
+
+.main-container {
+    margin-top: 30px;
+    padding-left: 30px;
+     display: flex;
+    align-items: center;
+}
+
+.admin-dashboard-human {
+    margin-top: 10px;
+    margin-left: 50px;
+    max-height: 320px;
+}
+
+.right-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 90px;
+    margin-right: 200px;
+}
+
+.right-top-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.welcome-text {
+    font-size: 40px;
+}
+
+.admin-name {
+    font-size: 60px;
+    color: #006BF6;
+}
+
+.system-status {
+    font-size: 25px;
+}
+
+.total-users {
+    border: 3px solid #006BF6;
+    border-radius: 15px;
+    width: 180px;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #006BF6;
+    margin-left: 50px;
+}
+
+.total-heading {
+    font-size: 15px;
+    font-weight: bold;
+
+}
+
+.total-count {
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 60px;
+}
+
+.total-service-providers {
+    border: 3px solid #006BF6;
+    border-radius: 15px;
+    width: 180px;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #006BF6;
+    margin-left: 50px;
+}
+
+.right-bottom-container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 30px;
+}
+
+.pending-provider-container {
+    display: flex;
+    align-items: center;
+    background-color: #FFA11D;
+    width: 380px;
+    border-radius: 15px;
+    height: 100px;
+}
+
+.pending-service-providers-icon {
+    margin-left: 20px;
+    max-height: 60;
+}
+
+.pending-service-provider-heading {
+    color: white;
+    font-size: 20px;
+    margin-left: 30px;
+}
+
+.pending-service-provider-count {
+    margin-left: 30px;
+    color: white;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.active-provider-container {
+    display: flex;
+    align-items: center;
+    background-color: #00DAB6;
+    margin-left: 85px;
+    width: 380px;
+    border-radius: 15px;
+    height: 100px;
+}
+.line{
+    margin: auto;
+    margin-top: 30px;
+    width: 1470px;
+    height: 3px;
+    background-color: #006BF6;
+}
+.buttom-container{
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+.buttons-container{
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+.quick{
+    color: #006BF6;
+    margin-right: 15px;
+    font-size: 30px;
+}
+.action{
+    font-size: 30px;
+}
+.buttons{
+    color: #FFFFFF;
+    background-color: #006BF6;
+    text-decoration: none;
+    height: 60px;
+    font-size: 20px;
+    margin-left: 70px;
+    margin-right: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 350px;
+    border-radius: 15px;
+}
+.footer{
+    background-color: #EFF6FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    height: 50px;
+}

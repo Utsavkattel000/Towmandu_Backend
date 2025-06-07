@@ -1,0 +1,109 @@
+body {
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    margin: 0px;
+    font-family: 'Roboto';
+}
+
+.left-container {
+    clip-path: path("M-200,0 H600 Q620,74.5 600,147 T600,294 T600,441 T600,588 T600,735 H-200 V0 Z");
+    background-color: #E1F1F5;
+    height: 100vh;
+    width: 45%;
+}
+.sign-up{
+    margin-top: 20px;
+}
+.sign-up-button{
+    text-decoration: none;
+    margin-left: 10px;
+    color: #079FA0;
+}
+
+.heading-container {
+    width: 300px;
+    text-align: center;
+    margin-left: 150px;
+    margin-top: 30px;
+}
+.right-container {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 110vh;
+}
+.image-container{
+    display: flex;
+    justify-content: center;
+    width: 300px;
+    margin-left: 150px;
+}
+.logo {
+    height: 120px;
+    margin-top: 50px;
+}
+
+.welcome {
+    color: black;
+    font-size: 30px;
+}
+
+.admin {
+    font-size: 60px;
+    color: #079FA0;
+}
+
+.login-form-container {
+    margin-left: 150px;
+    width: 305px;
+}
+.login-form{
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+}
+
+.input-field-container {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    width: 300px;
+    border-radius: 3px;
+    padding-left: 5px;
+}
+
+.input-fields {
+    border: 0px;
+    height: 30px;
+    border-radius: 3px;
+    width: 300px;
+    padding: 5px;
+}
+.button{
+    background-color: #079FA0;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    height: 45px;
+    font-weight: bold;
+    width: 305px;
+    padding: 5px;
+    margin-top: 30px;
+    font-size: medium;
+}
+.input-fields:focus {
+    outline: none;
+    border: 0px;
+}
+
+.image {
+    height: 600px;
+}
+.error-message{
+    color: #F61900;
+    margin-top: 5px;
+}

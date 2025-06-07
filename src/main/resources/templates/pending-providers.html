@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <title>pending-providers</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" href="css/pending-providers.css">
+</head>
+
+<body>
+<div class="navbar">
+    <img src="img/logo.png" alt="" class="logo">
+    <a href="/admin-dashboard" class="selected" style="margin-left: 150px;">Dashboard</a>
+    <a href="/users" class="links">Users</a>
+    <a href="/service-providers" class="links">Service Providers</a>
+    <img src="img/admin_human.png" alt="" class="admin-human">
+    <span class="name">Admin</span>
+    <a href="/logout" class="logout">LOGOUT</a>
+</div>
+<div class="main-container">
+        <span class="header">
+            Pending Service Providers
+        </span>
+    <br>
+    <div class="search-field-container">
+        <img src="img/search-icon.png" alt="">
+        <input type="text" name="searchText" id="" class="search-field" placeholder="Search...">
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+            <th>S.N.</th>
+            <th>Registered Name</th>
+            <th>Phone Numbers</th>
+            <th>Email</th>
+            <th>Service Types</th>
+            <th>Location</th>
+            <th>Submitted Document</th>
+            <th>Status</th>
+            <th>Action</th>
+            </thead>
+            <tbody th:each="provider, iterStat : ${pendingProviders}">
+            <tr>
+                <td th:text="${iterStat.index + 1}">1.</td>
+                <td th:text="${provider.registeredName}">Name</td>
+                <td>
+                            <span th:each="phone, iterStat : ${provider.phone}" style="display: inline;">
+                                <span th:text="${phone} + (${iterStat.last} ? '' : ', ')"></span>
+                            </span>
+                </td>
+
+                <td th:text="${provider.email}">email@example.com</td>
+                <td>
+                    <th:block th:each="entry, iterStat : ${provider.serviceTypeAndDriverCount}">
+                        <span th:text="${entry.key + ': ' + entry.value + ' drivers'}"></span>
+                        <span th:if="${!iterStat.last}">, </span>
+                    </th:block>
+                </td>
+
+                <td>
+                    <a th:href="${provider.locationLink}" th:text="${provider.location}"
+                       target="_blank">Location</a>
+                </td>
+                <td>
+                    <a th:href="${provider.documentLink}" target="_blank">View Docs</a>
+                </td>
+                <td>
+                    <div class="status" th:classappend="${provider.approvalStatus.toLowerCase()}">
+                        <img th:if="${provider.approvalStatus == 'Approved'}" th:src="@{/img/approved-icon.png}"
+                             alt="" style="margin: 0 5px;">
+                        <img th:if="${provider.approvalStatus == 'Rejected'}" th:src="@{/img/rejected-icon.png}"
+                             alt="" style="margin: 0 5px;">
+                        <img th:if="${provider.approvalStatus == 'Pending'}" th:src="@{/img/pending-icon.png}"
+                             alt="" style="margin: 0 5px;">
+                        <span th:text="${provider.approvalStatus}"></span>
+                    </div>
+                </td>
+
+
+                <td>
+                    <form th:action="@{/update-provider-status}" method="post" th:object="${provider}">
+                        <input type="hidden" name="_method" value="patch"/>
+                        <input type="hidden" name="id" th:value="${provider.id}"/>
+                        <select name="status" onchange="this.form.submit()">
+                            <option th:selected="${provider.approvalStatus == 'PENDING'}" value="PENDING">
+                                Pending
+                            </option>
+                            <option th:selected="${provider.approvalStatus == 'APPROVED'}" value="APPROVED">
+                                Approved
+                            </option>
+                            <option th:selected="${provider.approvalStatus == 'REJECTED'}" value="REJECTED">
+                                Rejected
+                            </option>
+                        </select>
+                    </form>
+                </td>
+
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+
+</div>
+<div class="footer">
+        <span>
+            ©2024 by Towmandu | All rights Reserved |
+        </span>
+</div>
+
+
+</body>
+
+</html>

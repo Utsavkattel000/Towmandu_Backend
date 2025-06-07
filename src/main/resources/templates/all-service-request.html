@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <title>All Service Requests</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" href="/css/all-service-requests.css">
+</head>
+
+<body>
+<div class="navbar">
+    <img src="/img/logo.png" alt="Logo" class="logo">
+    <a href="/admin-dashboard" class="selected" style="margin-left: 150px;">Dashboard</a>
+    <a href="/users" class="links">Users</a>
+    <a href="/service-providers" class="links">Service Providers</a>
+    <img src="/img/admin_human.png" alt="Admin" class="admin-human">
+    <span class="name">Admin</span>
+    <a href="/logout" class="logout">LOGOUT</a>
+</div>
+<div class="main-container">
+    <span class="header">All Service Requests</span>
+    <br>
+    <div class="search-field-container">
+        <img src="/img/search-icon.png" alt="Search">
+        <input type="text" name="searchText" id="searchText" class="search-field" placeholder="Search...">
+    </div>
+    <div class="filter option">
+        <label for="statusFilter">Filter by Status:</label>
+        <select id="statusFilter" onchange="filterTableByStatus()">
+            <option value="">All</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Cancelled">Cancelled</option>
+            <option value="Pending">Pending</option>
+            <option value="Completed">Completed</option>
+        </select>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>S.N.</th>
+                <th>Service Provider Name</th>
+                <th>Seeker Name</th>
+                <th>Driver Name</th>
+                <th>Requested Time</th>
+                <th>Accepted Time</th>
+                <th>Requested Location</th>
+                <th>Estimated Distance</th>
+                <th>Paid Amount</th>
+                <th>Service Type</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody th:each="request, iterStat : ${allRequests}">
+            <tr th:data-status="${request.serviceStatus}">
+                <td th:text="${iterStat.index + 1}">1</td>
+                <td th:text="${request.providerName}">Provider</td>
+                <td th:text="${request.seekerName}">Seeker</td>
+                <td th:text="${request.driverName}">Driver</td>
+                <td th:text="${#temporals.format(request.requestTime, 'yyyy-MM-dd HH:mm')}">2025-05-19 14:00</td>
+                <td th:text="${request.acceptTime != null} ? ${#temporals.format(request.acceptTime, 'yyyy-MM-dd HH:mm')} : '-'">2025-05-19 14:30</td>
+                <td>
+                    <a th:href="${request.serviceRequestLocationLink}" th:text="${request.serviceRequestLocation}" target="_blank">Location</a>
+                </td>
+                <td th:text="${request.distance != null} ? ${request.distance + ' km'} : '-'">2.5 km</td>
+                <td th:text="${(request.paidAmount == null or request.paidAmount == 0.0) ? '-' : 'Rs. ' + request.paidAmount}">Rs. 500</td>
+                <td th:text="${request.serviceType}">Bike Repair</td>
+                <td>
+                    <div class="status" th:classappend="${request.serviceStatus.toLowerCase()}">
+                        <span th:text="${request.serviceStatus}">Status</span>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="footer">
+    <span>©2024 by Towmandu | All rights Reserved</span>
+</div>
+
+<script>
+    function filterTableByStatus() {
+        const filterValue = document.getElementById("statusFilter").value.toLowerCase();
+        const rows = document.querySelectorAll("tbody tr");
+        rows.forEach(row => {
+            const rowStatus = row.getAttribute("data-status").toLowerCase();
+            row.style.display = (!filterValue || rowStatus === filterValue) ? "" : "none";
+        });
+    }
+</script>
+</body>
+
+</html>
