@@ -19,6 +19,7 @@ public class BusinessProjection {
     private Double locationLatitude;
     private Integer rank;
     private String phone;
+    private String price;
 
     public BusinessProjection(Long id, String name, Double locationLongitude, Double locationLatitude, String phone) {
         this.id = id;

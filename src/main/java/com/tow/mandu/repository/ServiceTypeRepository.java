@@ -9,4 +9,7 @@ public interface ServiceTypeRepository extends JpaRepository<ServiceType, Long> 
 
     ServiceType findServiceTypeByType(String serviceType);
 
+    boolean existsByType(String type);
+
+
 }

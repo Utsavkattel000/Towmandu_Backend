@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AdminPojoForLogin {
+public class UserPojoForLogin {
     private String email;
     private String password;
 }

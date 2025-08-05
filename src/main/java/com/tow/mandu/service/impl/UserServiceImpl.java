@@ -3,7 +3,7 @@ package com.tow.mandu.service.impl;
 import com.tow.mandu.enums.RoleType;
 import com.tow.mandu.model.Seeker;
 import com.tow.mandu.model.User;
-import com.tow.mandu.pojo.AdminPojoForLogin;
+import com.tow.mandu.pojo.UserPojoForLogin;
 import com.tow.mandu.pojo.UserPojoForAndroid;
 import com.tow.mandu.projection.AdminDashboardProjection;
 import com.tow.mandu.repository.SeekerRepository;
@@ -21,8 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.tow.mandu.enums.RoleType.ADMIN;
-import static com.tow.mandu.enums.RoleType.SEEKER;
+import static com.tow.mandu.enums.RoleType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -98,13 +97,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean loginAdmin(AdminPojoForLogin adminPojoForLogin) {
-        if (adminPojoForLogin.getEmail() == null || adminPojoForLogin.getPassword() == null) {
+    public Boolean loginAdmin(UserPojoForLogin userPojoForLogin) {
+        if (userPojoForLogin.getEmail() == null || userPojoForLogin.getPassword() == null) {
             return false;
         }
-        User user = userRepo.getByEmail(adminPojoForLogin.getEmail());
-        if (user != null && encoder.matches(adminPojoForLogin.getPassword(), user.getPassword())) {
+        User user = userRepo.getByEmail(userPojoForLogin.getEmail());
+        if (user != null && encoder.matches(userPojoForLogin.getPassword(), user.getPassword())) {
             return user.getRole().equals(ADMIN);
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean loginProvider(UserPojoForLogin userPojoForLogin) {
+        if (userPojoForLogin.getEmail() == null || userPojoForLogin.getPassword() == null) {
+            return false;
+        }
+        User user = userRepo.getByEmail(userPojoForLogin.getEmail());
+        if (user != null && encoder.matches(userPojoForLogin.getPassword(), user.getPassword())) {
+            return user.getRole().equals(PROVIDER);
         }
         return false;
     }
@@ -112,7 +123,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public AdminDashboardProjection getAdminDashboardData(HttpSession session) {
         AdminDashboardProjection adminDashboardProjection = userRepo.getAdminDashboardData();
-        adminDashboardProjection.setFullName(getUserByEmail(((User) session.getAttribute("admin")).getEmail()).getFullName());
+        adminDashboardProjection.setFullName(getUserByEmail(((User) session.getAttribute(ADMIN.name())).getEmail()).getFullName());
         return adminDashboardProjection;
     }
 

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>provider-dashboard</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" href="css/provider_dashboard.css">
+</head>
+
+<body>
+<div class="navbar">
+    <img src="img/logo.png" alt="" class="logo">
+    <a href="/provider-dashboard" class="selected" style="margin-left: 150px;">Dashboard</a>
+    <a href="/riders" class="links">Riders</a>
+    <img src="img/provider_human.png" alt="" class="provider-human">
+    <span class="name" th:text="${providerDashboardData.fullName}">Provider</span>
+    <a href="/logout" class="logout">LOGOUT</a>
+</div>
+
+<div class="main-container">
+    <img src="img/provider_dashboard_human.png" alt="" class="provider-dashboard-human">
+    <div class="right-container">
+        <div class="right-top-container">
+            <div class="welcome-stuff">
+                <span class="welcome-text">Welcome</span>
+                <br>
+                <span class="provider-name" th:text="${providerDashboardData.fullName}">Provider</span>
+                <br>
+                <span class="system-status">Let’s get you on the road!</span>
+            </div>
+            <div class="total-users">
+                <span class="total-heading">Online Riders</span>
+                <span class="total-count" th:text="${providerDashboardData.onlineRiders}">30</span>
+            </div>
+            <div class="total-service-providers">
+                <span class="total-heading">Total Riders</span>
+                <span class="total-count" th:text="${providerDashboardData.totalRiders}">05</span>
+            </div>
+        </div>
+
+        <div class="right-bottom-container">
+            <div class="pending-provider-container">
+                <img src="img/pending-service-providers.png" alt="" class="pending-service-providers-icon">
+                <div class="pending-provider-info-container">
+                    <span class="pending-service-provider-count" th:text="${providerDashboardData.pendingRequests}">25</span>
+                    <br>
+                    <span class="pending-service-provider-heading">Pending Request</span>
+                </div>
+            </div>
+
+            <div class="active-provider-container">
+                <img src="img/active-service-providers.png" alt="" class="pending-service-providers-icon">
+                <div class="active-service-provider-info-container">
+                    <span class="pending-service-provider-count" th:text="${providerDashboardData.workOnProgress}">05</span>
+                    <br>
+                    <span class="pending-service-provider-heading">Work on Progress</span>
+                </div>
+            </div>
+
+            <div class="completed-container">
+                <img src="img/complted_icon.png" alt="" class="pending-service-providers-icon">
+                <div class="active-service-provider-info-container">
+                    <span class="pending-service-provider-count" th:text="${providerDashboardData.completedToday}">05</span>
+                    <br>
+                    <span class="pending-service-provider-heading">Completed Today</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="line"></div>
+
+<div class="buttom-container">
+    <span class="quick">Quick</span>
+    <span class="action">Actions</span>
+</div>
+
+<div class="buttons-container">
+    <a href="/service-requests" class="buttons">View Service Requests</a>
+    <a href="/add-rider" class="buttons">Add Rider</a>
+    <a href="/manage-riders" class="buttons">Manage Riders</a>
+</div>
+
+<div class="footer">
+    <span>©2024 by Towmandu | All rights Reserved |</span>
+</div>
+</body>
+
+</html>

@@ -15,8 +15,10 @@ import java.util.Map;
 public class PendingProviderProjectionForAdmin {
     private Long id;
     private String registeredName;
-    private List<String> phone;
+    private String phone;
     private String email;
+    private String registrationNumber;
+    private String panNumber;
     private Map<String, Integer> serviceTypeAndDriverCount;
     private String location;
     private String locationLink;

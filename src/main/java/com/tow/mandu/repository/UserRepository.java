@@ -19,9 +19,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     }
 
     @Query(value = "SELECT " +
-            " (SELECT COUNT(*) FROM user WHERE role <> 'ADMIN') AS totalUsers, " +
+            " (SELECT COUNT(*) FROM user WHERE role = 'SEEKER') AS totalUsers, " +
             " (SELECT COUNT(*) FROM provider) AS totalProviders, " +
-            " (SELECT COUNT(*) FROM provider WHERE approve_status = false) AS totalPendingProviders, " +
+            " (SELECT COUNT(*) FROM provider WHERE approve_status = 'PENDING') AS totalPendingProviders, " +
             " (SELECT COUNT(*) FROM provider WHERE is_active = true) AS activeProviders",
             nativeQuery = true)
     AdminDashboardProjection getAdminDashboardData();

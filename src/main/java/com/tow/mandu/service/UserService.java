@@ -1,7 +1,7 @@
 package com.tow.mandu.service;
 
 import com.tow.mandu.enums.RoleType;
-import com.tow.mandu.pojo.AdminPojoForLogin;
+import com.tow.mandu.pojo.UserPojoForLogin;
 import com.tow.mandu.pojo.UserPojoForAndroid;
 import com.tow.mandu.projection.AdminDashboardProjection;
 import jakarta.servlet.http.HttpSession;
@@ -19,8 +19,10 @@ public interface UserService {
 	
 	ResponseEntity<?> isTokenValid(String token, String email, RoleType roleType);
 
-	Boolean loginAdmin(AdminPojoForLogin adminPojoForLogin);
+	Boolean loginAdmin(UserPojoForLogin userPojoForLogin);
 
+
+	Boolean loginProvider(UserPojoForLogin userPojoForLogin);
 
 	AdminDashboardProjection getAdminDashboardData(HttpSession session);
 

@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.tow.mandu.enums.RoleType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,25 +31,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         final String header = request.getHeader(AppConstants.AUTHORIZATION);
-        final String roleType = request.getHeader(AppConstants.ROLE_TYPE);
 
         if (header != null && header.startsWith(AppConstants.BEARER)) {
-            String token = header.substring(7);
+            String token = header.substring(AppConstants.BEARER.length());
             String email = jwtUtil.getEmail(token);
             String role = jwtUtil.getRole(token);
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                if (jwtUtil.validateToken(token, email, RoleType.valueOf(roleType)) && role != null) {
-                    GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.toUpperCase());
-                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                            email, null, List.of(authority));
-                    SecurityContextHolder.getContext().setAuthentication(auth);
+                if (role != null) {
+                    RoleType roleEnum = null;
+                    try {
+                        roleEnum = RoleType.valueOf(role);
+                    } catch (IllegalArgumentException ignored) {
+
+                    }
+
+                    if (roleEnum != null && jwtUtil.validateToken(token, email, roleEnum)) {
+                        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.toUpperCase());
+                        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                                email, null, List.of(authority));
+                        SecurityContextHolder.getContext().setAuthentication(auth);
+                    }
                 }
             }
         }
 
         filterChain.doFilter(request, response);
     }
-
-
 }

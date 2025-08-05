@@ -4,15 +4,14 @@ import com.tow.mandu.enums.ApproveStatus;
 import com.tow.mandu.enums.RoleType;
 import com.tow.mandu.model.Provider;
 import com.tow.mandu.model.Review;
+import com.tow.mandu.model.Rider;
 import com.tow.mandu.model.User;
 import com.tow.mandu.pojo.BusinessPojo;
 import com.tow.mandu.pojo.DistanceCalculationPojo;
 import com.tow.mandu.projection.BusinessProjection;
 import com.tow.mandu.projection.PendingProviderProjectionForAdmin;
-import com.tow.mandu.repository.ProviderRepository;
-import com.tow.mandu.repository.ReviewRepository;
-import com.tow.mandu.repository.ServiceTypeRepository;
-import com.tow.mandu.repository.UserRepository;
+import com.tow.mandu.projection.ProviderDashboardDataProjection;
+import com.tow.mandu.repository.*;
 import com.tow.mandu.service.FileService;
 import com.tow.mandu.service.ProviderService;
 import com.tow.mandu.utils.LocationUtil;
@@ -44,6 +43,7 @@ public class ProviderServiceImpl implements ProviderService {
     private final ReviewRepository reviewRepository;
     private final FileService fileService;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private final RiderRepository riderRepository;
 
     @Transactional
     @Override
@@ -99,7 +99,10 @@ public class ProviderServiceImpl implements ProviderService {
             pendingProviderProjection.setId(provider.getId());
             pendingProviderProjection.setRegisteredName(provider.getUser().getFullName());
             pendingProviderProjection.setEmail(provider.getUser().getEmail());
-
+            pendingProviderProjection.setPhone(provider.getUser().getPhone());
+            pendingProviderProjection.setRegistrationNumber(provider.getRegistrationNumber());
+            pendingProviderProjection.setPanNumber(provider.getPanNumber());
+            List<Rider> riders = riderRepository.findByProviderId(provider.getId());
             String placeName = locationUtil.getPlaceName(provider.getLocationLatitude(), provider.getLocationLongitude());
             pendingProviderProjection.setLocation(placeName);
 
@@ -125,8 +128,9 @@ public class ProviderServiceImpl implements ProviderService {
             providerLocation.setLongitude(candidate.getLocationLongitude());
             seekerLocation.setLatitude(latitude);
             seekerLocation.setLongitude(longitude);
-
             Double distance = locationUtil.calculateVincentyDistance(providerLocation, seekerLocation);
+            int price = distance < 1000 ? 50 : (int) Math.ceil(distance / 1000) * 50;
+            candidate.setPrice("Rs. " + price);
             candidate.setEstimatedDistance(distance);
             candidate.setRating(calculateRating(candidate.getId()));
         }
@@ -136,6 +140,13 @@ public class ProviderServiceImpl implements ProviderService {
             candidates.get(i).setRank(i);
         }
         return candidates.subList(0, rankLimit);
+    }
+
+
+
+    @Override
+    public ProviderDashboardDataProjection getProviderDashboardDataById(Long id) {
+        return providerRepository.findProviderDashboardDataById(id);
     }
 
     private Double calculateRating(Long providerId) {

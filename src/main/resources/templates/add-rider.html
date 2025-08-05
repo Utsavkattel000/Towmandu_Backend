@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Towmandu - Register Business Account</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" href="css/add-rider.css">
+</head>
+
+<body>
+<div class="container">
+    <div class="logo-section">
+        <img src="img/business_logo.png" alt="" class="logo">
+    </div>
+
+    <div class="form-title">
+        <span class="register-text">Create</span> Account for Rider
+    </div>
+
+    <form action="/add-rider" method="post">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="fullName">Full Name<span class="required">*</span></label>
+                <input type="text" id="fullName" name="fullName" placeholder="Enter Full Name" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number<span class="required">*</span></label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter Phone Number" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="email">Email Address<span class="required">*</span></label>
+                <input type="email" id="email" name="email" placeholder="Enter Email Address" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="service-type">Service Types<span class="required">*</span></label>
+                <div class="multiselect-container">
+                    <div class="selected-items" id="selected-services">
+                        <span class="placeholder">Select Service types this rider provides</span>
+                        <span style="margin-top: -3px; color:#aaa;">↓</span>
+                    </div>
+                    <div class="dropdown" id="services-dropdown">
+                        <div class="dropdown-item" data-value="REFUEL">Refuel</div>
+                        <div class="dropdown-item" data-value="TIRE_REPLACEMENT">Tire Replacement</div>
+                        <div class="dropdown-item" data-value="TOW">Tow</div>
+                        <div class="dropdown-item" data-value="OTHER">Other</div>
+                    </div>
+                    <!-- Changed name to match List<ServiceType> -->
+                    <input type="hidden" name="services" id="service-type">
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="register-button">Register</button>
+    </form>
+
+</div>
+
+<div class="footer">
+    ©2024 by Towmandu | All rights Reserved |
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const selectedItemsContainer = document.getElementById('selected-services');
+        const dropdown = document.getElementById('services-dropdown');
+        const hiddenInput = document.getElementById('service-type');
+        const formGroup = selectedItemsContainer.closest('.form-group');
+        let selectedServices = [];
+
+        // Toggle dropdown visibility
+        selectedItemsContainer.addEventListener('click', () => {
+            formGroup.classList.toggle('active');
+        });
+
+        // Handle dropdown item selection
+        dropdown.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const value = item.getAttribute('data-value');
+                const isSelected = selectedServices.includes(value);
+
+                if (isSelected) {
+                    // Remove from selection
+                    selectedServices = selectedServices.filter(s => s !== value);
+                    item.classList.remove('selected');
+                } else {
+                    // Add to selection
+                    selectedServices.push(value);
+                    item.classList.add('selected');
+                }
+
+                updateSelectedItems();
+                updateHiddenInput();
+            });
+        });
+
+        // Handle remove item
+        selectedItemsContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('remove-item')) {
+                const value = e.target.getAttribute('data-value');
+                selectedServices = selectedServices.filter(s => s !== value);
+                dropdown.querySelector(`.dropdown-item[data-value="${value}"]`).classList.remove('selected');
+                updateSelectedItems();
+                updateHiddenInput();
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!formGroup.contains(e.target)) {
+                formGroup.classList.remove('active');
+            }
+        });
+
+        function updateSelectedItems() {
+            selectedItemsContainer.innerHTML = '';
+            if (selectedServices.length === 0) {
+                selectedItemsContainer.innerHTML = '<span class="placeholder">Select Service types this rider provides</span>';
+            } else {
+                selectedServices.forEach(service => {
+                    const displayText = dropdown.querySelector(`.dropdown-item[data-value="${service}"]`).textContent;
+                    const item = document.createElement('div');
+                    item.className = 'selected-item';
+                    item.innerHTML = `${displayText} <span class="remove-item" data-value="${service}">×</span>`;
+                    selectedItemsContainer.appendChild(item);
+                });
+            }
+        }
+
+        function updateHiddenInput() {
+            hiddenInput.value = selectedServices.join(',');
+        }
+    });
+</script>
+</body>
+
+</html>

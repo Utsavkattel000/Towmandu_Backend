@@ -4,6 +4,7 @@ import com.tow.mandu.model.Provider;
 import com.tow.mandu.pojo.BusinessPojo;
 import com.tow.mandu.projection.BusinessProjection;
 import com.tow.mandu.projection.PendingProviderProjectionForAdmin;
+import com.tow.mandu.projection.ProviderDashboardDataProjection;
 import jakarta.transaction.Transactional;
 
 import java.io.IOException;
@@ -24,4 +25,6 @@ public interface ProviderService {
 	List<PendingProviderProjectionForAdmin> getPendingProviderData() throws IOException;
 
 	List<BusinessProjection> getNearestProvidersByLocation(Double latitude, Double longitude);
+
+    ProviderDashboardDataProjection getProviderDashboardDataById(Long id);
 }
