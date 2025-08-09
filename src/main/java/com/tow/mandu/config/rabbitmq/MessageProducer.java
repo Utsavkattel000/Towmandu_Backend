@@ -14,4 +14,8 @@ public class MessageProducer {
     public void convertAndSendGeneratedPasswordMail(EmailPojo emailPojo) {
         rabbitTemplate.convertAndSend(ExchangeInnit.GENERATED_PASSWORD_EXCHANGE, MQConfig.GENERATED_PASSWORD_KEY, emailPojo);
     }
+
+    public void convertAndSendEsewaOTP(EmailPojo emailPojo) {
+        rabbitTemplate.convertAndSend(ExchangeInnit.ESEWA_OTP_EXCHANGE, MQConfig.ESEWA_OTP_KEY, emailPojo);
+    }
 }

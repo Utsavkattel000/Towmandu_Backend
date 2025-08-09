@@ -31,13 +31,20 @@ public class MQConfig {
 
 
     public static final String GENERATED_PASSWORD_KEY = "generated_password_key";
-
+    public static final String ESEWA_OTP_KEY = "esewa_otp_key";
     @Bean
     public Binding bindingGeneratedPassword() {
         return BindingBuilder
                 .bind(queueInit.generatedPasswordQueue())
                 .to(exchangeInit.generatedPasswordExchange())
                 .with(GENERATED_PASSWORD_KEY);
+    }
+    @Bean
+    public Binding bindingEsewaOtp() {
+        return BindingBuilder
+                .bind(queueInit.esewaOtpQueue())
+                .to(exchangeInit.esewaOtpExchange())
+                .with(ESEWA_OTP_KEY);
     }
 
     @Bean

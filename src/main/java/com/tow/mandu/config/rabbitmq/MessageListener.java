@@ -19,4 +19,9 @@ public class MessageListener {
         emailService.sendGeneratedPasswordMail(emailPojo);
     }
 
+    @RabbitListener(queues = {QueueInnit.ESEWA_OTP_QUEUE})
+    public void esewaOtpListener(EmailPojo emailPojo) {
+        emailService.sendEsewaOtp(emailPojo);
+    }
+
 }

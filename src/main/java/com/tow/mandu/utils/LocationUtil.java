@@ -31,7 +31,8 @@ public class LocationUtil {
      * @return Distance in meters
      * @throws IllegalArgumentException if coordinates are invalid
      */
-    public Double calculateVincentyDistance(DistanceCalculationPojo point1, DistanceCalculationPojo point2) {
+
+    public static Double calculateVincentyDistance(DistanceCalculationPojo point1, DistanceCalculationPojo point2) {
         // Validate inputs
         if (point1 == null || point2 == null ||
                 point1.getLatitude() == null || point1.getLongitude() == null ||
@@ -101,7 +102,6 @@ public class LocationUtil {
     public String createGoogleMapsRedirectLink(Double latitude, Double longitude) {
         return "https://www.google.com/maps?q=" + latitude + "," + longitude;
     }
-
 
     public synchronized String getPlaceName(Double latitude, Double longitude) {
         long currentTime = System.currentTimeMillis();

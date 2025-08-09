@@ -4,6 +4,8 @@ import com.tow.mandu.enums.RoleType;
 import com.tow.mandu.enums.ServiceStatus;
 import com.tow.mandu.pojo.ServiceRequestPojo;
 import com.tow.mandu.projection.BusinessProjection;
+import com.tow.mandu.service.EsewaPaymentService;
+import com.tow.mandu.service.SeekerService;
 import com.tow.mandu.service.ServiceRequestService;
 import com.tow.mandu.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,8 @@ import java.util.List;
 public class ServiceController {
     private final ServiceRequestService serviceRequestService;
     private final JwtUtil jwtUtil;
+    private final SeekerService seekerService;
+    private final EsewaPaymentService esewaPaymentService;
 
     @PostMapping("/request-service")
     public ResponseEntity<?> requestService(@RequestBody ServiceRequestPojo serviceRequest) {
@@ -36,6 +40,12 @@ public class ServiceController {
         Long serviceRequestId = serviceRequestService.getCurrentServiceRequestId();
         serviceRequestService.selectProvider(serviceRequestId, providerId);
         return ResponseEntity.ok().body("Service Request Sent to Provider");
+    }
+
+    @GetMapping("/get-latest-request")
+    public ResponseEntity<?> getLatestServiceRequest() {
+
+        return ResponseEntity.ok().body(serviceRequestService.getLatestServiceRequestForSeeker(seekerService.getSeekerByUser(jwtUtil.getUserFromToken()).getId()));
     }
 
     @GetMapping("/get-requests")
@@ -61,5 +71,14 @@ public class ServiceController {
     @GetMapping("/getRequestDetail")
     public ResponseEntity<?> getServiceRequestsDetails(@RequestParam Long id) {
         return ResponseEntity.ok().body(serviceRequestService.getRiderServiceRequestDetails(id));
+    }
+
+    @PostMapping("/request-payment-otp")
+    public ResponseEntity<?> requestPaymentOtp(@RequestParam String email, @RequestParam String password) {
+        if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
+            return ResponseEntity.badRequest().body("Email and password cannot be empty");
+        }
+        esewaPaymentService.sendOTP(email, password);
+        return ResponseEntity.ok().body("OTP sent to your email");
     }
 }

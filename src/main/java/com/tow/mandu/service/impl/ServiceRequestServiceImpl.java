@@ -8,6 +8,7 @@ import com.tow.mandu.pojo.DistanceCalculationPojo;
 import com.tow.mandu.pojo.ServiceRequestPojo;
 import com.tow.mandu.projection.AllServiceRequestProjection;
 import com.tow.mandu.projection.BusinessProjection;
+import com.tow.mandu.projection.LatestServiceRequestProjection;
 import com.tow.mandu.projection.ServiceRequestDetailProjection;
 import com.tow.mandu.repository.RiderAssignmentRepository;
 import com.tow.mandu.repository.RiderRepository;
@@ -66,9 +67,6 @@ public class ServiceRequestServiceImpl implements ServiceRequestService {
     @Transactional
     public List<BusinessProjection> save(ServiceRequestPojo serviceRequestPojo) {
         ServiceRequest serviceRequest = new ServiceRequest();
-        System.out.println("longitude: " + serviceRequestPojo.getLongitude());
-        System.out.println("latitude: " + serviceRequestPojo.getLatitude());
-        System.out.println("Geohash: " + locationUtil.getGeoHash(serviceRequestPojo.getLatitude(), serviceRequestPojo.getLongitude()));
         serviceRequest.setServiceRequestLatitude(serviceRequestPojo.getLatitude());
         serviceRequest.setServiceRequestLongitude(serviceRequestPojo.getLongitude());
         serviceRequest.setRequestTime(LocalDateTime.now());
@@ -109,12 +107,18 @@ public class ServiceRequestServiceImpl implements ServiceRequestService {
     public Boolean updateStatus(Long serviceRequestId, ServiceStatus status) {
         ServiceRequest serviceRequest = serviceRequestRepository.findById(serviceRequestId).orElse(null);
         if (serviceRequest != null) {
+            Rider rider = serviceRequest.getRider();
             serviceRequest.setServiceStatus(status);
             serviceRequestRepository.save(serviceRequest);
             if(status.equals(ServiceStatus.ACCEPTED) || status.equals(ServiceStatus.IN_PROGRESS)) {
-                Rider rider = serviceRequest.getRider();
                 rider.setStatus(RiderStatus.BUSY);
             }
+            if(status.equals(ServiceStatus.COMPLETED)) {
+                serviceRequest.setServiceCompletionTime(LocalDateTime.now());
+                serviceRequest.setFinalPrice(serviceRequest.getBasePrice());
+                rider.setStatus(RiderStatus.ACTIVE);
+            }
+
             Notification notification = NotificationUtil.buildNotification(serviceRequest.getSeeker().getUser(),
                     "Service Request Status Update",
                     "Your service request has been " + status.name() + " by "
@@ -124,6 +128,52 @@ public class ServiceRequestServiceImpl implements ServiceRequestService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public LatestServiceRequestProjection getLatestServiceRequestForSeeker(Long seekerId) {
+        // Fetch the latest service request by seeker ID, ordered by request time descending
+        ServiceRequest sr = serviceRequestRepository.findFirstBySeekerIdOrderByRequestTimeDesc(seekerId);
+        if (sr == null) {
+            return null;
+        }
+
+        LatestServiceRequestProjection projection = new LatestServiceRequestProjection();
+        projection.setId(sr.getId());
+        projection.setStatus(sr.getServiceStatus());
+        projection.setLatitude(sr.getServiceRequestLatitude());
+        projection.setLongitude(sr.getServiceRequestLongitude());
+        projection.setEstimatedDistance(sr.getDistance()); // Use pre-calculated distance if available
+
+        Rider rider = sr.getRider();
+        if (rider != null) {
+            User riderUser = rider.getUser();
+            if (riderUser != null) {
+                projection.setRiderName(riderUser.getFullName());
+                projection.setRiderPhone(riderUser.getPhone());
+            }
+
+            Provider provider = rider.getProvider();
+            if (provider != null) {
+                User providerUser = provider.getUser();
+                if (providerUser != null) {
+                    projection.setProviderName(providerUser.getFullName());
+                    projection.setPhone(providerUser.getPhone());
+                }
+
+                // If distance is null, calculate it using Vincenty formula between request and provider locations
+                if (projection.getEstimatedDistance() == null &&
+                        sr.getServiceRequestLatitude() != null && sr.getServiceRequestLongitude() != null &&
+                        provider.getLocationLatitude() != null && provider.getLocationLongitude() != null) {
+                    DistanceCalculationPojo requestPoint = new DistanceCalculationPojo(sr.getServiceRequestLatitude(), sr.getServiceRequestLongitude());
+                    DistanceCalculationPojo providerPoint = new DistanceCalculationPojo(provider.getLocationLatitude(), provider.getLocationLongitude());
+                    Double calculatedDistance = LocationUtil.calculateVincentyDistance(requestPoint, providerPoint);
+                    projection.setEstimatedDistance(calculatedDistance);
+                }
+            }
+        }
+
+        return projection;
     }
 
     @Override

@@ -43,6 +43,23 @@ public class EmailService {
         }
     }
 
+    public void sendEsewaOtp(EmailPojo emailPojo) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(emailFrom);
+            message.setTo(emailPojo.getTo());
+            message.setSubject(emailPojo.getSubject());
+            message.setText(emailPojo.getBody());
+            javaMailSender.send(message);
+        } catch (Exception e) {
+            emailPojo.setRetryCount(emailPojo.getRetryCount() + 1);
+            if (emailPojo.getRetryCount() <= MAX_RETRIES)
+                messageProducer.convertAndSendGeneratedPasswordMail(emailPojo);
+            else
+                return;
+        }
+    }
+
 
 
 }

@@ -51,5 +51,8 @@ public interface ServiceRequestRepository extends JpaRepository<ServiceRequest, 
 
     List<ServiceRequest> findByRiderAndServiceStatus(Rider rider, ServiceStatus serviceStatus);
 
+    @Query("SELECT sr FROM ServiceRequest sr WHERE sr.seeker.id = :seekerId ORDER BY sr.requestTime DESC limit 1")
+    ServiceRequest findFirstBySeekerIdOrderByRequestTimeDesc(Long seekerId);
+
 
 }
